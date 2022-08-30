@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Announcement from "../components/Announcement";
 import Navbar from "../components/Navbar";
 import Newsletter from "../components/Newsletter";
@@ -6,6 +6,9 @@ import Footer from "../components/Footer";
 import styled from "styled-components";
 import { Add, Remove } from "@material-ui/icons";
 import { mobile } from "../responsive";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { publicRequest } from "../requestMethod";
 
 const Container = styled.div``;
 
@@ -114,22 +117,32 @@ const Button = styled.div`
 `;
 
 const Product = () => {
+  const [product, setProduct] = useState({});
+
+  console.log(product);
+
+  const id = useLocation().pathname.split("/")[2];
+  const getProduct = () => {
+    publicRequest
+      .get(`/products/${id}`)
+      .then((response) => setProduct(response.data));
+  };
+
+  useEffect(() => {
+    getProduct();
+  }, [id]);
+
   return (
     <Container>
       <Navbar />
       <Announcement />
       <Wrapper>
         <ImageContainer>
-          <Img src="https://i.ibb.co/S6qMxwr/jean.jpg"></Img>
+          <Img src={product.img}></Img>
         </ImageContainer>
         <InfoContainer>
-          <Title>Jumsuit Jeans</Title>
-          <Desc>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis
-            sequi neque, debitis accusantium consequuntur reiciendis inventore!
-            Itaque minus tenetur, soluta rem explicabo nihil assumenda
-            necessitatibus qui! Laboriosam quaerat ullam et!
-          </Desc>
+          <Title>{product.title}</Title>
+          <Desc>{product.desc}</Desc>
           <Price>20 $ </Price>
           <FilterContainer>
             <Filter>

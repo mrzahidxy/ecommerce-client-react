@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Announcement from "../components/Announcement";
 import Navbar from "../components/Navbar";
 import Products from "../components/Products";
@@ -6,6 +6,7 @@ import Newsletter from "../components/Newsletter";
 import Footer from "../components/Footer";
 import styled from "styled-components";
 import { mobile } from "../responsive";
+import { useLocation } from "react-router-dom";
 
 const Title = styled.h1`
   margin: 20px;
@@ -36,6 +37,17 @@ const Select = styled.select`
 const Option = styled.option``;
 
 const ProductList = () => {
+  const cat = useLocation().pathname.split("/")[2];
+  const [filters, setFilters] = useState({});
+  const [sort, setSort] = useState("new");
+
+  const handleFilters = (e) => {
+    setFilters({ ...filters, [e.target.name]: e.target.value });
+  };
+  const handleSort = (e) => {
+    setSort(e.target.value);
+  };
+
   return (
     <>
       <Navbar />
@@ -44,7 +56,7 @@ const ProductList = () => {
       <FilterContainer>
         <Filter>
           <FilterText>Filter Products</FilterText>
-          <Select>
+          <Select onChange={handleFilters} name="color">
             <Option disabled selected>
               Color
             </Option>
@@ -53,7 +65,7 @@ const ProductList = () => {
             <Option>Black</Option>
             <Option>White</Option>
           </Select>
-          <Select>
+          <Select onChange={handleFilters} name="size">
             <Option disabled selected>
               Size
             </Option>
@@ -65,17 +77,17 @@ const ProductList = () => {
         </Filter>
         <Filter>
           <FilterText>Sort Products</FilterText>
-          <Select>
+          <Select onChange={handleSort}>
             <Option disabled selected>
               Newest
             </Option>
-            <Option>Low to High </Option>
-            <Option>How to Low</Option>
+            <Option value="asc">Low to High </Option>
+            <Option value="desc">High to Low</Option>
           </Select>
         </Filter>
       </FilterContainer>
 
-      <Products />
+      <Products cat={cat} sort={sort} filters={filters} />
       <Newsletter />
       <Footer />
     </>
