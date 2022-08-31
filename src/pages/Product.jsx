@@ -143,22 +143,20 @@ const Product = () => {
         <InfoContainer>
           <Title>{product.title}</Title>
           <Desc>{product.desc}</Desc>
-          <Price>20 $ </Price>
+          <Price>{product.price} $ </Price>
           <FilterContainer>
             <Filter>
               <FilterText>Color: </FilterText>
-              <FilterColor color="black"></FilterColor>
-              <FilterColor color="blue"></FilterColor>
-              <FilterColor color="red"></FilterColor>
+              {product.color?.map((c) => (
+                <FilterColor color={c}></FilterColor>
+              ))}
             </Filter>
             <Filter>
               <FilterText>Size: </FilterText>
               <FilterSize>
-                <FilterSizeOption>XL</FilterSizeOption>
-                <FilterSizeOption>L</FilterSizeOption>
-                <FilterSizeOption>M</FilterSizeOption>
-                <FilterSizeOption>S</FilterSizeOption>
-                <FilterSizeOption>XS</FilterSizeOption>
+                {product.size?.map((item) => (
+                  <FilterSizeOption>{item}</FilterSizeOption>
+                ))}
               </FilterSize>
             </Filter>
           </FilterContainer>
