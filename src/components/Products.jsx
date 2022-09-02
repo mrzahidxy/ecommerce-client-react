@@ -17,9 +17,9 @@ const Products = ({ sort, filters, cat }) => {
 
   // console.log("filter", sort, filters, cat);
 
-  console.log("products", filterProducts);
+  // console.log("products", filterProducts);
 
-  console.log(cat);
+  // console.log(cat);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -69,7 +69,7 @@ const Products = ({ sort, filters, cat }) => {
               <Product item={item} />
             </div>
           ))
-        : products.map((item) => (
+        : products.slice(0,10).map((item) => (
             <div key={item._id}>
               <Product item={item} />
             </div>
