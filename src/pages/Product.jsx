@@ -9,6 +9,8 @@ import { mobile } from "../responsive";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { publicRequest } from "../requestMethod";
+import { useDispatch } from "react-redux";
+import { addProduct } from "../redux/cartRedux";
 
 const Container = styled.div``;
 
@@ -118,20 +120,35 @@ const Button = styled.div`
 
 const Product = () => {
   const [product, setProduct] = useState({});
+  const [quantity, setQuantity] = useState(1);
+  const [color, setColor] = useState("");
+  const [size, setSize] = useState("");
+  const dispatch = useDispatch();
 
-  console.log(product);
-
+  //fetching product based on id
   const id = useLocation().pathname.split("/")[2];
   const getProduct = () => {
     publicRequest
       .get(`/products/${id}`)
       .then((response) => setProduct(response.data));
   };
-
   useEffect(() => {
     getProduct();
   }, [id]);
 
+  const handleQuantity = (type) => {
+    if (type === "dec") {
+      quantity > 1 && setQuantity(quantity - 1);
+    } else {
+      setQuantity(quantity + 1);
+    }
+  };
+
+  const handleCLick = () => {
+    dispatch(addProduct({ ...product, quantity, size, color }));
+  };
+
+  
   return (
     <Container>
       <Navbar />
@@ -148,12 +165,15 @@ const Product = () => {
             <Filter>
               <FilterText>Color: </FilterText>
               {product.color?.map((c) => (
-                <FilterColor color={c}></FilterColor>
+                <FilterColor
+                  color={c}
+                  onClick={() => setColor(c)}
+                ></FilterColor>
               ))}
             </Filter>
             <Filter>
               <FilterText>Size: </FilterText>
-              <FilterSize>
+              <FilterSize onChange={(e) => setSize(e.target.value)}>
                 {product.size?.map((item) => (
                   <FilterSizeOption>{item}</FilterSizeOption>
                 ))}
@@ -162,11 +182,11 @@ const Product = () => {
           </FilterContainer>
           <AddContainer>
             <AmmountContainer>
-              <Add />
-              <Ammount>1</Ammount>
-              <Remove />
+              <Remove onClick={() => handleQuantity("dec")} />
+              <Ammount>{quantity}</Ammount>
+              <Add onClick={() => handleQuantity("inc")} />
             </AmmountContainer>
-            <Button>Add to Cart</Button>
+            <Button onClick={handleCLick}>Add to Cart</Button>
           </AddContainer>
         </InfoContainer>
       </Wrapper>

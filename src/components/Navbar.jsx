@@ -4,6 +4,7 @@ import React from "react";
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux/es/exports";
 
 const Container = styled.div`
   height: 60px;
@@ -51,7 +52,7 @@ const Center = styled.div`
 
 const Logo = styled.h1`
   font-weight: bold;
-  ${mobile({ fontSize: "15px"})}
+  ${mobile({ fontSize: "15px" })}
 `;
 
 const Right = styled.div`
@@ -70,6 +71,10 @@ const MenuItem = styled.div`
 `;
 
 const Navbar = () => {
+  const quantity = useSelector((state) => state.cart.quantity);
+
+  // console.log(quantity)
+
   return (
     <Container>
       <Wrapper>
@@ -100,7 +105,7 @@ const Navbar = () => {
 
           <Link to="/cart" style={{ textDecoration: "none", color: "black" }}>
             <MenuItem>
-              <Badge badgeContent={5} color="primary">
+              <Badge badgeContent={quantity} color="primary">
                 <ShoppingCartOutlined />
               </Badge>
             </MenuItem>
