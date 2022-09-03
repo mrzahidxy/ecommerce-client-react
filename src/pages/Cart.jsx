@@ -144,7 +144,15 @@ const SummaryItem = styled.div`
 const SummaryItemText = styled.span``;
 const SummaryItemPrice = styled.span``;
 
-const Button = styled.button``;
+const Button = styled.button`
+  padding: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  border: ${(props) => props.type === "filled" && "none"};
+  background-color: ${(props) =>
+    props.type === "filled" ? "black" : "transparent"};
+  color: ${(props) => (props.type === "filled" ? "white" : "black")};
+`;
 
 const Cart = () => {
   const key =
@@ -247,8 +255,9 @@ const Cart = () => {
                 name="Procharok Shop"
                 billingAddress
                 shippingAddress
-                description="Your total is $20"
-                amount={200}
+                name= "Your payment"
+                description= {cart.total}
+                amount={cart.total}
                 token={onToken}
                 stripeKey={key}
               >

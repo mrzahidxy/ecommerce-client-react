@@ -3,12 +3,14 @@ import Product from "./Product";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { mobile } from "../responsive";
 
 const Container = styled.div`
   padding: 20px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  ${mobile({ padding: "0", flexDirection: "column" })};
 `;
 
 const Products = ({ sort, filters, cat }) => {
