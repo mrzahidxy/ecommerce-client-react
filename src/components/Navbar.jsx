@@ -1,10 +1,12 @@
-import { Badge } from "@material-ui/core";
+import { Badge, Box, Modal, Tooltip, Typography } from "@material-ui/core";
 import { Search, ShoppingCartOutlined } from "@material-ui/icons";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux/es/exports";
+import { persistor } from "../redux/store";
+import ReactTooltip from "react-tooltip";
 
 const Container = styled.div`
   height: 60px;
@@ -73,7 +75,14 @@ const MenuItem = styled.div`
 const Navbar = () => {
   const quantity = useSelector((state) => state.cart.quantity);
 
+  const user = useSelector((state) => state.user.currentUser);
+
   // console.log(quantity)
+
+  const handleLogOut = () => {
+    persistor.purge();
+    window.location.reload(false);
+  };
 
   return (
     <Container>
@@ -93,17 +102,40 @@ const Navbar = () => {
         </Center>
 
         <Right>
-          <Link
-            to="/register"
-            style={{ textDecoration: "none", color: "black" }}
-          >
-            <MenuItem>REGISTER</MenuItem>
-          </Link>
-          <Link to="/login" style={{ textDecoration: "none", color: "black" }}>
-            <MenuItem>LOG IN</MenuItem>
-          </Link>
+          {!user && (
+            <>
+              <Link
+                to="/register"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <MenuItem>REGISTER</MenuItem>
+              </Link>
+              <Link
+                to="/login"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <MenuItem>LOG IN</MenuItem>
+              </Link>
+            </>
+          )}
+          {user && (
+            <Link style={{ textDecoration: "none", color: "black" }}>
+              <MenuItem
+                onClick={() => {
+                  handleLogOut();
+                }}
+              >
+                LOG OUT
+              </MenuItem>
+            </Link>
+          )}
 
-          <Link to="/cart" style={{ textDecoration: "none", color: "black" }}>
+          <Link
+            to="/cart"
+            style={{ textDecoration: "none", color: "black" }}
+            data-tip
+            data-for="registerTip"
+          >
             <MenuItem>
               <Badge badgeContent={quantity} color="primary">
                 <ShoppingCartOutlined />
@@ -112,6 +144,11 @@ const Navbar = () => {
           </Link>
         </Right>
       </Wrapper>
+      {!user && (
+        <ReactTooltip id="registerTip" place="top" effect="solid">
+          To access the cart log in first!
+        </ReactTooltip>
+      )}
     </Container>
   );
 };

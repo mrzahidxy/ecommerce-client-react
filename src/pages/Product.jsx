@@ -7,10 +7,10 @@ import styled from "styled-components";
 import { Add, Remove } from "@material-ui/icons";
 import { mobile } from "../responsive";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
 import { publicRequest } from "../requestMethod";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from "../redux/cartRedux";
+import ReactTooltip from "react-tooltip";
 
 const Container = styled.div``;
 
@@ -124,6 +124,7 @@ const Product = () => {
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.currentUser);
 
   //fetching product based on id
   const id = useLocation().pathname.split("/")[2];
@@ -148,7 +149,6 @@ const Product = () => {
     dispatch(addProduct({ ...product, quantity, size, color }));
   };
 
-  
   return (
     <Container>
       <Navbar />
@@ -186,7 +186,16 @@ const Product = () => {
               <Ammount>{quantity}</Ammount>
               <Add onClick={() => handleQuantity("inc")} />
             </AmmountContainer>
-            <Button onClick={handleCLick}>Add to Cart</Button>
+            <Button
+              onClick={!user ? "" : handleCLick}
+              data-tip
+              data-for="toolTip"
+            >
+              Add to Cart
+            </Button>
+            <ReactTooltip id="toolTip" place="top" effect="solid">
+              To access the cart log in first!
+            </ReactTooltip>
           </AddContainer>
         </InfoContainer>
       </Wrapper>
