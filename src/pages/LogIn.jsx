@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { login } from "../apiCalls";
 import { mobile } from "../responsive";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 100vw;
@@ -43,7 +44,7 @@ const Input = styled.input`
   margin: 20px 10px 0 0;
 `;
 
-const Link = styled.a`
+const LinkInfo = styled.a`
   font-size: 15px 0;
   font-weight: 200;
   margin: 5px 0;
@@ -98,8 +99,25 @@ const LogIn = () => {
             Log In
           </Button>
           {isError && <Error>Somethings went wrong</Error>}
-          <Link>Forget Your Password?</Link>
-          <Link>Creat An Account!</Link>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <Link>
+              <LinkInfo> Forget Your Password?</LinkInfo>
+            </Link>
+
+            <Link
+              to="/register"
+             
+            >
+              {" "}
+              <LinkInfo>Creat An Account!</LinkInfo>
+            </Link>
+          </div>
         </Form>
       </Wrapper>
     </Container>

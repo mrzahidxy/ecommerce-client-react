@@ -157,18 +157,53 @@ const Button = styled.button`
 const Cart = () => {
   const key =
     "pk_test_51LYYjtE3f7z3X8dphqRDYL7Qu6RtpFgQogUTvuGmAMDXD30BzFzycBEoyVqgMLTR2KZhYpgp9CPbJ5kk7saBae3700sXRqG6kZ";
-
-  const cart = useSelector((state) => state.cart);
+  const { products, price, total } = useSelector((state) => state.cart);
+  const user = useSelector((state) => state.user.currentUser);
+  const { _id, accessToken } = user;
+  const [orders, setOrders] = useState([]);
   const history = useHistory();
   const [stripeToken, setStripeToken] = useState("");
   const onToken = (token) => {
     setStripeToken(token);
   };
 
+  //create new order
+  useEffect(() => {
+    const collection = [];
+    products.map(({ _id, quantity }) =>
+      collection.push({ productId: _id, quantity: quantity })
+    );
+    setOrders(collection);
+  }, []);
+
+  const makeOrder = async () => {
+    try {
+      const res = await axios.post(
+        `https://ecommerce-mern-api.vercel.app/api/orders`,
+        {
+          userId: _id,
+          products: orders,
+          amount: total,
+          address: {},
+          status: "pending",
+        },
+        {
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      console.log("res", res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //payment
   const makeRequest = async () => {
     try {
       const res = await axios.post(
-        "https://ecommerce-mernapi.herokuapp.com/api/checkout/payment",
+        "https://ecommerce-mern-api.vercel.app/api/checkout/payment",
         {
           tokenId: stripeToken.id,
           amount: 2000,
@@ -202,7 +237,7 @@ const Cart = () => {
 
         <Bottom>
           <Info>
-            {cart.products.map((product) => (
+            {products.map((product) => (
               <Product>
                 <ProductDetail>
                   <Image src={product.img}></Image>
@@ -223,7 +258,7 @@ const Cart = () => {
                     <ProductAmount>{product.quantity}</ProductAmount>
                     <Remove />
                   </ProductAmountContainer>
-                  <ProductPrice> {cart.price}</ProductPrice>
+                  <ProductPrice> {price}</ProductPrice>
                 </PriceDetail>
               </Product>
             ))}
@@ -234,7 +269,7 @@ const Cart = () => {
             <SummaryTitle>Order Summary</SummaryTitle>
             <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice> $ {cart.total}</SummaryItemPrice>
+              <SummaryItemPrice> $ {total}</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Estimsted Shipping</SummaryItemText>
@@ -246,7 +281,7 @@ const Cart = () => {
             </SummaryItem>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
+              <SummaryItemPrice>$ {total}</SummaryItemPrice>
             </SummaryItem>
             {stripeToken ? (
               <span> Processing... please wait!</span>
@@ -255,13 +290,13 @@ const Cart = () => {
                 name="Procharok Shop"
                 billingAddress
                 shippingAddress
-                name= "Your payment"
-                description= {cart.total}
-                amount={cart.total}
+                name="Your payment"
+                description={total}
+                amount={total}
                 token={onToken}
                 stripeKey={key}
               >
-                <Button>Checkout Now</Button>
+                <Button onClick={makeOrder}>Checkout Now</Button>
               </StripeCheckout>
             )}
           </Summary>

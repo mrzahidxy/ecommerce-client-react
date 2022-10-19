@@ -9,7 +9,7 @@ import { mobile } from "../responsive";
 import { useLocation } from "react-router-dom";
 import { publicRequest } from "../requestMethod";
 import { useDispatch, useSelector } from "react-redux";
-import { addProduct } from "../redux/cartRedux";
+import { addProduct } from "../redux/cartReducer";
 import ReactTooltip from "react-tooltip";
 
 const Container = styled.div``;
