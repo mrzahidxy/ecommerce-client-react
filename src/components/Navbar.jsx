@@ -4,9 +4,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux/es/exports";
+import { useDispatch, useSelector } from "react-redux/es/exports";
 import { persistor } from "../redux/store";
 import ReactTooltip from "react-tooltip";
+import { login } from "../apiCalls";
+import { loginSuccess } from "../redux/userReducer";
 
 const Container = styled.div`
   height: 60px;
@@ -74,14 +76,18 @@ const MenuItem = styled.div`
 
 const Navbar = () => {
   const quantity = useSelector((state) => state.cart.quantity);
-
   const user = useSelector((state) => state.user.currentUser);
+  const dispatch = useDispatch();
 
   // console.log(quantity)
 
   const handleLogOut = () => {
     persistor.purge();
     window.location.reload(false);
+  };
+
+  const guestLoginHandler = () => {
+    dispatch(loginSuccess(1));
   };
 
   return (
@@ -104,17 +110,20 @@ const Navbar = () => {
         <Right>
           {!user && (
             <>
-              <Link
+              {/* <Link
                 to="/register"
                 style={{ textDecoration: "none", color: "black" }}
               >
                 <MenuItem>REGISTER</MenuItem>
-              </Link>
+              </Link> */}
               <Link
                 to="/login"
                 style={{ textDecoration: "none", color: "black" }}
               >
                 <MenuItem>LOG IN</MenuItem>
+              </Link>
+              <Link style={{ textDecoration: "none", color: "black" }}>
+                <MenuItem onClick={guestLoginHandler}>GUEST LOGIN</MenuItem>
               </Link>
             </>
           )}
