@@ -167,6 +167,8 @@ const Cart = () => {
     setStripeToken(token);
   };
 
+  console.log("Token", accessToken);
+
   //create new order
   useEffect(() => {
     const collection = [];
