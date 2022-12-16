@@ -2,13 +2,20 @@ import Announcement from "../components/Announcement";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import styled from "styled-components";
-import { Add, Remove } from "@material-ui/icons";
+import { Add, Delete, Remove } from "@material-ui/icons";
 import { mobile } from "../responsive";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import StripeCheckout from "react-stripe-checkout";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import {
+  clearCart,
+  decreaseProduct,
+  increaseProduct,
+  removeProduct,
+} from "../redux/cartReducer";
 
 const Container = styled.div``;
 
@@ -61,6 +68,7 @@ const Info = styled.div`
 const Product = styled.div`
   display: flex;
   justify-content: space-between;
+  margin: 10px;
   ${mobile({ flexDirection: "column" })};
 `;
 
@@ -71,6 +79,7 @@ const ProductDetail = styled.div`
 
 const Image = styled.img`
   width: 200px;
+  height: 200px;
 `;
 
 const Details = styled.div`
@@ -154,22 +163,25 @@ const Button = styled.button`
   color: ${(props) => (props.type === "filled" ? "white" : "black")};
 `;
 
+const ActionButton = styled.button`
+  border: none;
+  background: transparent;
+`;
+
 const Cart = () => {
   const key =
     "pk_test_51LYYjtE3f7z3X8dphqRDYL7Qu6RtpFgQogUTvuGmAMDXD30BzFzycBEoyVqgMLTR2KZhYpgp9CPbJ5kk7saBae3700sXRqG6kZ";
   const { products, price, total } = useSelector((state) => state.cart);
-  const user = useSelector((state) => state.user.currentUser);
-  const { _id, accessToken } = user;
+  const user = useSelector((state) => state.user?.currentUser);
   const [orders, setOrders] = useState([]);
   const history = useHistory();
   const [stripeToken, setStripeToken] = useState("");
+  const dispatch = useDispatch();
   const onToken = (token) => {
     setStripeToken(token);
   };
 
-  console.log("Token", accessToken);
-
-  //create new order
+  //create a order
   useEffect(() => {
     const collection = [];
     products.map(({ _id, quantity }) =>
@@ -201,26 +213,26 @@ const Cart = () => {
     }
   };
 
-  //payment
-  const makeRequest = async () => {
-    try {
-      const res = await axios.post(
-        "https://ecommerce-mern-api.vercel.app/api/checkout/payment",
-        {
-          tokenId: stripeToken.id,
-          amount: 2000,
-        }
-      );
-      console.log(res.data);
-      history.push("/paySuccess");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // //payment
+  // const makeRequest = async () => {
+  //   try {
+  //     const res = await axios.post(
+  //       "https://ecommerce-mern-api.vercel.app/api/checkout/payment",
+  //       {
+  //         tokenId: stripeToken.id,
+  //         amount: 2000,
+  //       }
+  //     );
+  //     console.log(res.data);
+  //     history.push("/paySuccess");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    stripeToken && makeRequest();
-  }, [stripeToken]);
+  // useEffect(() => {
+  //   stripeToken && makeRequest();
+  // }, [stripeToken]);
 
   return (
     <Container>
@@ -240,14 +252,17 @@ const Cart = () => {
         <Bottom>
           <Info>
             {products.map((product) => (
-              <Product>
+              <Product key={product._id}>
                 <ProductDetail>
                   <Image src={product.img}></Image>
                   <Details>
                     <ProductName>
-                      <b>PRODUCT :</b> {product.title}
+                      <b>PRODUCT:</b> {product.title}
                     </ProductName>
-                    <ProductId>{product._id}</ProductId>
+                    <ProductName>
+                      <b>PRICE:</b> {product.price}
+                    </ProductName>
+                    {/* <ProductId>{product._id}</ProductId> */}
                     <ProductColor color={product.color} />
                     <ProductSize>
                       <b>SIZE :</b> {product.size}
@@ -256,16 +271,33 @@ const Cart = () => {
                 </ProductDetail>
                 <PriceDetail>
                   <ProductAmountContainer>
-                    <Add />
+                    <ActionButton
+                      onClick={() => dispatch(increaseProduct(product))}
+                    >
+                      <Add />
+                    </ActionButton>
                     <ProductAmount>{product.quantity}</ProductAmount>
-                    <Remove />
+                    <ActionButton
+                      onClick={() => dispatch(decreaseProduct(product))}
+                    >
+                      <Remove />
+                    </ActionButton>
                   </ProductAmountContainer>
+                  <ActionButton
+                    onClick={() => dispatch(removeProduct(product))}
+                  >
+                    <Delete />
+                  </ActionButton>
+
                   <ProductPrice> {price}</ProductPrice>
                 </PriceDetail>
               </Product>
             ))}
 
             <Hr />
+            <ActionButton onClick={() => dispatch(clearCart())}>
+              <Delete />
+            </ActionButton>
           </Info>
           <Summary>
             <SummaryTitle>Order Summary</SummaryTitle>
@@ -275,17 +307,19 @@ const Cart = () => {
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Estimsted Shipping</SummaryItemText>
-              <SummaryItemPrice> $ 5.90</SummaryItemPrice>
+              <SummaryItemPrice> $ 10 </SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Shipping Discount</SummaryItemText>
-              <SummaryItemPrice>$ - 5.90</SummaryItemPrice>
+              <SummaryItemPrice>$ {(total / 10000) * 5}</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$ {total}</SummaryItemPrice>
+              <SummaryItemPrice>
+                $ {total + 10 - (total / 100) * 5}
+              </SummaryItemPrice>
             </SummaryItem>
-            {stripeToken ? (
+            {/* {stripeToken ? (
               <span> Processing... please wait!</span>
             ) : (
               <StripeCheckout
@@ -300,7 +334,7 @@ const Cart = () => {
               >
                 <Button onClick={makeOrder}>Checkout Now</Button>
               </StripeCheckout>
-            )}
+            )} */}
           </Summary>
         </Bottom>
       </Wrapper>

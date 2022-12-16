@@ -186,16 +186,9 @@ const Product = () => {
               <Ammount>{quantity}</Ammount>
               <Add onClick={() => handleQuantity("inc")} />
             </AmmountContainer>
-            <Button
-              onClick={!user ? "" : handleCLick}
-              data-tip
-              data-for="toolTip"
-            >
+            <Button onClick={handleCLick} data-tip data-for="toolTip">
               Add to Cart
             </Button>
-            <ReactTooltip id="toolTip" place="top" effect="solid">
-              To access the cart log in first!
-            </ReactTooltip>
           </AddContainer>
         </InfoContainer>
       </Wrapper>
