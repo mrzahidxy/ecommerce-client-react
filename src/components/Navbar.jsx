@@ -1,5 +1,6 @@
 import { Badge, Box, Modal, Tooltip, Typography } from "@material-ui/core";
-import { Search, ShoppingCartOutlined } from "@material-ui/icons";
+import { ExitToApp, Search, ShoppingCartOutlined } from "@material-ui/icons";
+import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { mobile } from "../responsive";
@@ -128,15 +129,30 @@ const Navbar = () => {
             </>
           )}
           {user && (
-            <Link to="/" style={{ textDecoration: "none", color: "black" }}>
-              <MenuItem
-                onClick={() => {
-                  handleLogOut();
-                }}
+            <>
+              <Link to="/" style={{ textDecoration: "none", color: "black" }}>
+                <MenuItem
+                  onClick={() => {
+                    handleLogOut();
+                  }}
+                >
+                  <Tooltip title="Log Out">
+                    <ExitToApp />
+                  </Tooltip>
+                </MenuItem>
+              </Link>
+
+              <Link
+                to="/profile"
+                style={{ textDecoration: "none", color: "black" }}
               >
-                LOG OUT
-              </MenuItem>
-            </Link>
+                <MenuItem>
+                  <Tooltip title="Profile">
+                    <AccountCircleOutlinedIcon />
+                  </Tooltip>
+                </MenuItem>
+              </Link>
+            </>
           )}
 
           <Link
@@ -147,7 +163,10 @@ const Navbar = () => {
           >
             <MenuItem>
               <Badge badgeContent={quantity} color="primary">
+              <Tooltip title="Cart">
+
                 <ShoppingCartOutlined />
+                </Tooltip>
               </Badge>
             </MenuItem>
           </Link>
