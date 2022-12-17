@@ -16,6 +16,7 @@ import {
   increaseProduct,
   removeProduct,
 } from "../redux/cartReducer";
+import { privateRequest } from "../requestMethod";
 
 const Container = styled.div``;
 
@@ -172,15 +173,40 @@ const Cart = () => {
   const key =
     "pk_test_51LYYjtE3f7z3X8dphqRDYL7Qu6RtpFgQogUTvuGmAMDXD30BzFzycBEoyVqgMLTR2KZhYpgp9CPbJ5kk7saBae3700sXRqG6kZ";
   const { products, price, total } = useSelector((state) => state.cart);
-  const user = useSelector((state) => state.user?.currentUser);
+  const user = useSelector((state) => state.user.currentUser);
   const [orders, setOrders] = useState([]);
   const history = useHistory();
   const [stripeToken, setStripeToken] = useState("");
   const dispatch = useDispatch();
+
   const onToken = (token) => {
     setStripeToken(token);
   };
 
+  //payment
+  const makePayment = async () => {
+    try {
+      const res = await axios.post(
+        "https://ecommerce-mern-api.vercel.app/api/checkout/payment",
+        {
+          tokenId: stripeToken.id,
+          amount: total,
+        }
+      );
+      console.log("payment", res.data);
+      makeOrder();
+      history.push("/paySuccess");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    stripeToken && makePayment();
+  }, [stripeToken]);
+
+
+  
   //create a order
   useEffect(() => {
     const collection = [];
@@ -192,47 +218,23 @@ const Cart = () => {
 
   const makeOrder = async () => {
     try {
-      const res = await axios.post(
-        `https://ecommerce-mern-api.vercel.app/api/orders`,
+      const res = await privateRequest.post(
+        `orders`,
+
         {
-          userId: _id,
+          userId: user?._id,
           products: orders,
           amount: total,
-          address: {},
+          address: { city: "Dhaka" },
           status: "pending",
-        },
-        {
-          headers: {
-            token: `Bearer ${accessToken}`,
-          },
         }
       );
-      console.log("res", res.data);
+      dispatch(clearCart());
+      console.log("order", res.data);
     } catch (error) {
       console.log(error);
     }
   };
-
-  // //payment
-  // const makeRequest = async () => {
-  //   try {
-  //     const res = await axios.post(
-  //       "https://ecommerce-mern-api.vercel.app/api/checkout/payment",
-  //       {
-  //         tokenId: stripeToken.id,
-  //         amount: 2000,
-  //       }
-  //     );
-  //     console.log(res.data);
-  //     history.push("/paySuccess");
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   stripeToken && makeRequest();
-  // }, [stripeToken]);
 
   return (
     <Container>
@@ -319,22 +321,21 @@ const Cart = () => {
                 $ {total + 10 - (total / 100) * 5}
               </SummaryItemPrice>
             </SummaryItem>
-            {/* {stripeToken ? (
+            {stripeToken ? (
               <span> Processing... please wait!</span>
             ) : (
               <StripeCheckout
                 name="Procharok Shop"
                 billingAddress
                 shippingAddress
-                name="Your payment"
                 description={total}
                 amount={total}
                 token={onToken}
                 stripeKey={key}
               >
-                <Button onClick={makeOrder}>Checkout Now</Button>
+                <Button>Checkout Now</Button>
               </StripeCheckout>
-            )} */}
+            )}
           </Summary>
         </Bottom>
       </Wrapper>

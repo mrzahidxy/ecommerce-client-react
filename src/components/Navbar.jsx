@@ -122,13 +122,13 @@ const Navbar = () => {
               >
                 <MenuItem>LOG IN</MenuItem>
               </Link>
-              <Link style={{ textDecoration: "none", color: "black" }}>
+              <Link to="/" style={{ textDecoration: "none", color: "black" }}>
                 <MenuItem onClick={guestLoginHandler}>GUEST LOGIN</MenuItem>
               </Link>
             </>
           )}
           {user && (
-            <Link style={{ textDecoration: "none", color: "black" }}>
+            <Link to="/" style={{ textDecoration: "none", color: "black" }}>
               <MenuItem
                 onClick={() => {
                   handleLogOut();
@@ -153,11 +153,6 @@ const Navbar = () => {
           </Link>
         </Right>
       </Wrapper>
-      {!user && (
-        <ReactTooltip id="registerTip" place="top" effect="solid">
-          To access the cart log in first!
-        </ReactTooltip>
-      )}
     </Container>
   );
 };

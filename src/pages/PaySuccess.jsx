@@ -1,4 +1,6 @@
+import { Announcement } from "@material-ui/icons";
 import styled from "styled-components";
+import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
 
 const Container = styled.div`
@@ -26,44 +28,20 @@ const Wrapper = styled.div`
 const Title = styled.h1`
   font-size: 20px;
   font-weight: 300;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Input = styled.input`
-  flex: 1;
-  min-width: 40%;
-  padding: 10px;
-  margin: 20px 10px 0 0;
-`;
-
-const Link = styled.a`
-  font-size: 15px 0;
-  font-weight: 200;
-  margin: 5px 0;
-  text-decoration: underline;
-  cursor: pointer;
-`;
-
-const Button = styled.button`
-  width: 40%;
-  padding: 10px 20px;
-  margin: 10px 0;
-  background-color: teal;
-  color: white;
-  cursor: pointer;
+  color: #4bb543;
 `;
 
 const PaySuccess = () => {
   return (
-    <Container>
-      <Wrapper>
-        <Title>Payment Done</Title>
-      </Wrapper>
-    </Container>
+    <>
+
+      <Navbar />
+      <Container>
+        <Wrapper>
+          <Title>Payment successfully done and your order confirmed!</Title>
+        </Wrapper>
+      </Container>
+    </>
   );
 };
 

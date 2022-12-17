@@ -17,7 +17,6 @@ import { useSelector } from "react-redux";
 const App = () => {
   const user = useSelector((state) => state.user.currentUser);
 
-  
   return (
     <Router>
       <Switch>
@@ -30,7 +29,9 @@ const App = () => {
         <Route path="/product/:id">
           <Product />
         </Route>
-        <Route path="/cart">{!user ? <Redirect to="/" /> : <Cart />}</Route>
+        <Route path="/cart">
+          <Cart />
+        </Route>
         <Route path="/logIn">{user ? <Redirect to="/" /> : <LogIn />}</Route>
         <Route path="/register">
           {user ? <Redirect to="/" /> : <Register />}

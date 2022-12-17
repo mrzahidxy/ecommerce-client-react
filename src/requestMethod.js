@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const BASE_URL = "https://ecommerce-mern-api.vercel.app/api/";
-const TOKEN = "";
+const user = JSON.parse(localStorage.getItem("user"));
+const TOKEN = user?.accessToken;
 
 export const publicRequest = axios.create({
   baseURL: BASE_URL,
