@@ -88,7 +88,7 @@ const Navbar = () => {
   };
 
   const guestLoginHandler = () => {
-    dispatch(loginSuccess(1));
+    login(dispatch, { username: "zahid", password: "123456" });
   };
 
   return (
@@ -163,9 +163,8 @@ const Navbar = () => {
           >
             <MenuItem>
               <Badge badgeContent={quantity} color="primary">
-              <Tooltip title="Cart">
-
-                <ShoppingCartOutlined />
+                <Tooltip title="Cart">
+                  <ShoppingCartOutlined />
                 </Tooltip>
               </Badge>
             </MenuItem>

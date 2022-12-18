@@ -205,8 +205,6 @@ const Cart = () => {
     stripeToken && makePayment();
   }, [stripeToken]);
 
-
-  
   //create a order
   useEffect(() => {
     const collection = [];
@@ -297,9 +295,6 @@ const Cart = () => {
             ))}
 
             <Hr />
-            <ActionButton onClick={() => dispatch(clearCart())}>
-              <Delete />
-            </ActionButton>
           </Info>
           <Summary>
             <SummaryTitle>Order Summary</SummaryTitle>
@@ -318,7 +313,7 @@ const Cart = () => {
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
               <SummaryItemPrice>
-                $ {total + 10 - (total / 100) * 5}
+                $ {total + 10 - (total / 10000) * 5}
               </SummaryItemPrice>
             </SummaryItem>
             {stripeToken ? (

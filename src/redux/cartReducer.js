@@ -30,6 +30,7 @@ const cartSlice = createSlice({
         (product) => product._id !== action.payload._id
       );
       state.products = products;
+      state.total -= action.payload.price * action.payload.quantity;
     },
 
     clearCart: (state, action) => {
@@ -48,11 +49,11 @@ const cartSlice = createSlice({
     decreaseProduct: (state, action) => {
       state.products.map((product) => {
         product._id == action.payload._id &&
-          product.quantity > 1 &&
+          product.quantity > 0 &&
           (product.quantity -= 1);
       });
 
-      state.total > 1 && (state.total -= parseInt(action.payload.price));
+      state.total > 0 && (state.total -= parseInt(action.payload.price));
     },
   },
 });
