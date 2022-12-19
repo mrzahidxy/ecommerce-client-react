@@ -1,15 +1,13 @@
-import { Badge, Box, Modal, Tooltip, Typography } from "@material-ui/core";
+import { Badge, Tooltip} from "@material-ui/core";
 import { ExitToApp, Search, ShoppingCartOutlined } from "@material-ui/icons";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
-import React, { useState } from "react";
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux/es/exports";
 import { persistor } from "../redux/store";
-import ReactTooltip from "react-tooltip";
 import { login } from "../apiCalls";
-import { loginSuccess } from "../redux/userReducer";
+
 
 const Container = styled.div`
   height: 60px;

@@ -57,7 +57,7 @@ const Button = styled.button`
 `;
 
 const Register = () => {
-  const [isSuccess, setIsSuccess] = useState(false);
+  // const [isSuccess, setIsSuccess] = useState(false);
   const [user, setUser] = useState({
     username: "",
     email: "",

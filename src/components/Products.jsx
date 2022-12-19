@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Product from "./Product";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { mobile } from "../responsive";

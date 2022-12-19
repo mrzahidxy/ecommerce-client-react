@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
@@ -32,7 +33,7 @@ const Title = styled.h1`
 const ProfileContainer = styled.div`
   background-color: #fff;
   flex: 1;
-  padding: 20px 40px ;
+  padding: 20px 40px;
   height: 40vh;
 `;
 
@@ -48,9 +49,9 @@ const OrderContainer = styled.div`
 `;
 
 const Orders = styled.div`
-height: 70vh;
-overflow-y: scroll;
-margin-top: 20px;
+  height: 70vh;
+  overflow-y: scroll;
+  margin-top: 20px;
 `;
 
 const Order = styled.div`
@@ -68,9 +69,15 @@ const Profile = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [orders, setOrders] = useState([]);
 
+  console.log("user", currentUser);
+
   const orderHistory = async () => {
     try {
-      const res = await privateRequest.get(`orders/find/${currentUser?._id}`);
+      const res = await privateRequest.get(`orders/find/${currentUser?._id}`, {
+        headers: {
+          token: `Bearer ${currentUser.accessToken}`,
+        },
+      });
       setOrders(res.data);
       console.log(res.data);
     } catch (err) {

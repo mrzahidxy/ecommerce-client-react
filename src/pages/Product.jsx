@@ -10,7 +10,7 @@ import { useLocation } from "react-router-dom";
 import { publicRequest } from "../requestMethod";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from "../redux/cartReducer";
-import ReactTooltip from "react-tooltip";
+
 
 const Container = styled.div``;
 
@@ -124,7 +124,7 @@ const Product = () => {
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.currentUser);
+  // const user = useSelector((state) => state.user.currentUser);
 
   //fetching product based on id
   const id = useLocation().pathname.split("/")[2];

@@ -218,13 +218,17 @@ const Cart = () => {
     try {
       const res = await privateRequest.post(
         `orders`,
-
         {
           userId: user?._id,
           products: orders,
           amount: total,
           address: { city: "Dhaka" },
           status: "pending",
+        },
+        {
+          headers: {
+            token: `Bearer ${user.accessToken}`,
+          },
         }
       );
       dispatch(clearCart());
@@ -323,7 +327,7 @@ const Cart = () => {
                 name="Procharok Shop"
                 billingAddress
                 shippingAddress
-                description={total}
+                // description={total}
                 amount={total}
                 token={onToken}
                 stripeKey={key}

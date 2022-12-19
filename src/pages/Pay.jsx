@@ -32,34 +32,7 @@ const Title = styled.h1`
   font-weight: 300;
 `;
 
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
 
-const Input = styled.input`
-  flex: 1;
-  min-width: 40%;
-  padding: 10px;
-  margin: 20px 10px 0 0;
-`;
-
-const Link = styled.a`
-  font-size: 15px 0;
-  font-weight: 200;
-  margin: 5px 0;
-  text-decoration: underline;
-  cursor: pointer;
-`;
-
-const Button = styled.button`
-  width: 40%;
-  padding: 10px 20px;
-  margin: 10px 0;
-  background-color: teal;
-  color: white;
-  cursor: pointer;
-`;
 
 const key =
   "pk_test_51LYYjtE3f7z3X8dphqRDYL7Qu6RtpFgQogUTvuGmAMDXD30BzFzycBEoyVqgMLTR2KZhYpgp9CPbJ5kk7saBae3700sXRqG6kZ";

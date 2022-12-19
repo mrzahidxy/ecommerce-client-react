@@ -10,14 +10,14 @@ const cartSlice = createSlice({
   reducers: {
     addProduct: (state, action) => {
       const productExit = state.products.find((product) => {
-        return product._id == action.payload._id;
+        return product._id === action.payload._id;
       });
 
       !productExit && (state.quantity += 1);
 
       productExit
         ? state.products.map((product) => {
-            product._id == action.payload._id &&
+            product._id === action.payload._id &&
               (product.quantity += action.payload.quantity);
           })
         : state.products.push(action.payload);
@@ -41,14 +41,14 @@ const cartSlice = createSlice({
 
     increaseProduct: (state, action) => {
       state.products.map((product) => {
-        product._id == action.payload._id && (product.quantity += 1);
+        product._id === action.payload._id && (product.quantity += 1);
       });
       state.total += parseInt(action.payload.price);
     },
 
     decreaseProduct: (state, action) => {
       state.products.map((product) => {
-        product._id == action.payload._id &&
+        product._id === action.payload._id &&
           product.quantity > 0 &&
           (product.quantity -= 1);
       });

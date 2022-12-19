@@ -1,4 +1,4 @@
-import { Announcement } from "@material-ui/icons";
+
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
